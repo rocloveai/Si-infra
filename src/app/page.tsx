@@ -1,13 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import type { Post } from "@/types/db";
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("zh-CN", {
-    month: "short",
-    day: "numeric",
-  });
-}
+import { CATEGORIES, SITE_CONFIG } from "@/lib/constants";
+import { formatDate, stripMarkdown } from "@/lib/utils";
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -20,230 +14,209 @@ export default async function HomePage() {
   const list = posts ?? [];
   const featured = list[0];
   const rest = list.slice(1, 7);
-  const categoryLabel: Record<string, string> = {
-    ai: "AI",
-    stablecoin: "Stablecoin",
-    web3: "Web3",
-  };
+  
+  const categoryMap = Object.fromEntries(CATEGORIES.map(c => [c.slug, c.label]));
 
   return (
-    <>
-      {/* Hero */}
-      <section className="relative border-b border-surface-border bg-[var(--bg-section)] py-20 sm:py-28">
-        <div className="mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <h1 className="text-3xl font-semibold tracking-tight text-[var(--text)] sm:text-4xl md:text-5xl">
-            加入 Si-Infra 社区
+    <div className="flex flex-col">
+      {/* Hero Section - 模仿图片中的顶部大图风格 */}
+      <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden bg-brand-coffee">
+        <div className="absolute inset-0 opacity-40">
+          {/* 模拟背景图 */}
+          <div className="h-full w-full bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80')] bg-cover bg-center"></div>
+        </div>
+        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+          <span className="mb-4 block text-sm font-semibold uppercase tracking-[0.3em] text-brand-cream/80">
+            Welcome to {SITE_CONFIG.name}
+          </span>
+          <h1 className="font-serif text-5xl font-bold leading-tight text-white sm:text-7xl">
+            Join us for Community <br /> Building Week
           </h1>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-[var(--text-muted)]">
-            讨论 AI、Stablecoin、Web3 与基础设施 — 每个声音都重要。
-          </p>
-          <div className="mt-8">
+          <div className="mt-12">
             <Link
               href="/login"
-              className="inline-block rounded-md border border-[var(--accent)] bg-transparent px-6 py-3 text-sm font-medium text-[var(--accent)] transition hover:bg-[var(--accent)]/10"
+              className="inline-block rounded-full bg-brand-brown px-10 py-4 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-brand-cream hover:text-brand-coffee"
             >
-              立即加入
+              Register Now
             </Link>
           </div>
         </div>
       </section>
 
-      {/* 理念 / 双栏 */}
-      <section className="border-b border-surface-border bg-surface py-16 sm:py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="grid gap-12 md:grid-cols-2 md:gap-16">
-            <div>
-              <h2 className="text-2xl font-semibold tracking-tight text-[var(--text)] sm:text-3xl">
-                每个声音都重要
+      {/* Intro Section - 模仿图片中的 "Each person matters" 部分 */}
+      <section className="bg-brand-cream py-24 sm:py-32">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+            <div className="order-2 lg:order-1">
+              <h2 className="font-serif text-4xl font-semibold text-brand-coffee sm:text-5xl">
+                Each person matters
               </h2>
-              <p className="mt-4 leading-relaxed text-[var(--text-muted)]">
-                Si-Infra 是一个开放论坛，聚焦 AI、稳定币与 Web3 基础设施。
-                无论你是开发者、研究者还是爱好者，都可以在这里发帖、讨论与分享。
+              <p className="mt-8 text-lg leading-relaxed text-brand-coffee/70">
+                {SITE_CONFIG.description} 我们致力于构建一个开放、理性、有信息密度的讨论环境。
+                无论你是开发者、研究者还是爱好者，你的声音在这里都至关重要。
               </p>
-              <blockquote className="mt-6 border-l-2 border-[var(--accent)] bg-[var(--bg-section)] pl-4 pr-4 py-3 text-[var(--text-muted)]">
-                “共建开放、理性、有信息密度的讨论环境。”
-              </blockquote>
+              <div className="mt-10">
+                <blockquote className="relative border-l-2 border-brand-brown pl-8 py-2">
+                  <span className="absolute -left-2 -top-4 font-serif text-6xl text-brand-brown/20">“</span>
+                  <p className="font-serif text-xl italic text-brand-brown">
+                    A better world starts with a caring community.
+                  </p>
+                </blockquote>
+              </div>
             </div>
-            <div className="flex items-center justify-center rounded-lg border border-surface-border bg-[var(--bg-section)] min-h-[240px]">
-              <span className="text-[var(--text-muted)] text-sm tracking-wider">
-                SI-INFRA
-              </span>
+            <div className="order-1 lg:order-2">
+              <div className="aspect-[4/5] overflow-hidden rounded-3xl bg-brand-sand shadow-2xl">
+                <div className="h-full w-full bg-[url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80')] bg-cover bg-center"></div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 讨论主题 - 三卡片 */}
-      <section className="border-b border-surface-border bg-[var(--bg-section)] py-16 sm:py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <h2 className="text-center text-2xl font-semibold tracking-tight text-[var(--text)] sm:text-3xl">
-            讨论主题
+      {/* Schedule/Topics Section - 模仿图片中的 "Schedule of Events" */}
+      <section className="bg-brand-brown py-24 text-white">
+        <div className="mx-auto max-w-6xl px-6 text-center">
+          <h2 className="font-serif text-4xl font-semibold sm:text-5xl">
+            Explore Our Topics
           </h2>
-          <p className="mx-auto mt-2 max-w-xl text-center text-[var(--text-muted)]">
-            按分类浏览与发帖
-          </p>
-          <div className="mt-10 grid gap-6 sm:grid-cols-3">
-            {[
-              { slug: "ai", label: "AI", desc: "人工智能与机器学习" },
-              { slug: "stablecoin", label: "Stablecoin", desc: "稳定币与支付基础设施" },
-              { slug: "web3", label: "Web3", desc: "区块链与去中心化应用" },
-            ].map(({ slug, label, desc }) => (
+          <div className="mt-16 grid gap-8 sm:grid-cols-3">
+            {CATEGORIES.map(({ slug, label, description }) => (
               <Link
                 key={slug}
                 href={`/${slug}`}
-                className="group block rounded-lg border border-surface-border bg-surface p-6 text-center transition hover:border-[var(--accent)] hover:bg-surface/80"
+                className="group relative overflow-hidden rounded-2xl bg-white/10 p-10 backdrop-blur-sm transition hover:bg-white hover:text-brand-coffee"
               >
-                <span className="text-lg font-medium text-[var(--text)] group-hover:text-[var(--accent)]">
-                  {label}
+                <span className="mb-4 block text-xs font-bold uppercase tracking-widest text-brand-cream group-hover:text-brand-brown">
+                  Category
                 </span>
-                <p className="mt-2 text-sm text-[var(--text-muted)]">{desc}</p>
+                <h3 className="font-serif text-2xl font-semibold">{label}</h3>
+                <p className="mt-4 text-sm opacity-70 group-hover:opacity-100">{description}</p>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 最新动态 - 表格式/列表 */}
-      <section className="border-b border-surface-border bg-surface py-16 sm:py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <h2 className="text-2xl font-semibold tracking-tight text-[var(--text)]">
-            最新动态
-          </h2>
-          <p className="mt-1 text-[var(--text-muted)]">
-            按时间排序的近期帖子
-          </p>
-          {list.length === 0 ? (
-            <div className="mt-8 rounded-lg border border-surface-border bg-[var(--bg-section)] py-12 text-center text-[var(--text-muted)]">
-              暂无帖子，登录后即可发帖。
+      {/* Latest Posts - 模仿图片中的 "Community Reflections" */}
+      <section className="bg-brand-cream py-24 sm:py-32">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="mb-16 flex items-end justify-between">
+            <div>
+              <h2 className="font-serif text-4xl font-semibold text-brand-coffee sm:text-5xl">
+                Community Reflections
+              </h2>
+              <p className="mt-4 text-brand-coffee/60 uppercase tracking-widest text-sm font-bold">
+                Latest discussions from our members
+              </p>
             </div>
-          ) : (
-            <div className="mt-6 overflow-hidden rounded-lg border border-surface-border">
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="border-b border-surface-border bg-[var(--bg-section)]">
-                    <th className="px-4 py-3 font-medium text-[var(--text-muted)]">标题</th>
-                    <th className="px-4 py-3 font-medium text-[var(--text-muted)]">分类</th>
-                    <th className="px-4 py-3 font-medium text-[var(--text-muted)]">日期</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {list.slice(0, 5).map((post) => (
-                    <tr key={post.id} className="border-b border-surface-border last:border-0">
-                      <td className="px-4 py-3">
-                        <Link
-                          href={`/post/${post.id}`}
-                          className="font-medium text-[var(--text)] hover:text-[var(--accent)]"
-                        >
-                          {post.title}
-                        </Link>
-                      </td>
-                      <td className="px-4 py-3 text-[var(--text-muted)]">
-                        {categoryLabel[post.category_slug] ?? post.category_slug}
-                      </td>
-                      <td className="px-4 py-3 text-[var(--text-muted)]">
-                        {formatDate(post.created_at)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <Link href="/ai" className="hidden text-sm font-bold uppercase tracking-widest text-brand-brown hover:underline sm:block">
+              View All Posts →
+            </Link>
+          </div>
+
+          <div className="grid gap-12 lg:grid-cols-3">
+            {featured && (
+              <Link
+                href={`/post/${featured.id}`}
+                className="group lg:col-span-2"
+              >
+                <div className="aspect-[16/9] overflow-hidden rounded-3xl bg-brand-sand shadow-lg">
+                  <div className="h-full w-full bg-[url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105"></div>
+                </div>
+                <div className="mt-8">
+                  <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-brand-brown">
+                    <span>{categoryMap[featured.category_slug]}</span>
+                    <span className="h-px w-8 bg-brand-border"></span>
+                    <span className="text-brand-coffee/40">{formatDate(featured.created_at)}</span>
+                  </div>
+                  <h3 className="mt-4 font-serif text-3xl font-semibold text-brand-coffee group-hover:text-brand-brown">
+                    {featured.title}
+                  </h3>
+                  <p className="mt-4 text-lg leading-relaxed text-brand-coffee/60 line-clamp-2">
+                    {stripMarkdown(featured.body_md)}
+                  </p>
+                </div>
+              </Link>
+            )}
+            <div className="space-y-10">
+              {rest.slice(0, 3).map((post) => (
+                <Link
+                  key={post.id}
+                  href={`/post/${post.id}`}
+                  className="group flex gap-6"
+                >
+                  <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-2xl bg-brand-sand">
+                    <div className="h-full w-full bg-[url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80')] bg-cover bg-center transition-transform duration-500 group-hover:scale-110"></div>
+                  </div>
+                  <div className="flex flex-col justify-center">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-brand-brown">
+                      {categoryMap[post.category_slug]}
+                    </span>
+                    <h4 className="mt-1 font-serif text-lg font-semibold leading-tight text-brand-coffee group-hover:text-brand-brown line-clamp-2">
+                      {post.title}
+                    </h4>
+                    <span className="mt-2 text-[10px] uppercase tracking-widest text-brand-coffee/40">
+                      Read more
+                    </span>
+                  </div>
+                </Link>
+              ))}
             </div>
-          )}
+          </div>
         </div>
       </section>
 
-      {/* 精选 / 社区文章 - 一大 + 多小 */}
-      {rest.length > 0 && (
-        <section className="border-b border-surface-border bg-[var(--bg-section)] py-16 sm:py-20">
-          <div className="mx-auto max-w-5xl px-4 sm:px-6">
-            <h2 className="text-2xl font-semibold tracking-tight text-[var(--text)]">
-              社区动态
-            </h2>
-            <p className="mt-1 text-[var(--text-muted)]">
-              与社区一起交流
-            </p>
-            <div className="mt-8 grid gap-8 md:grid-cols-3">
-              {featured && (
-                <Link
-                  href={`/post/${featured.id}`}
-                  className="md:col-span-2 rounded-lg border border-surface-border bg-surface p-6 transition hover:border-[var(--accent)]"
-                >
-                  <h3 className="font-semibold text-[var(--text)] line-clamp-2">
-                    {featured.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-[var(--text-muted)] line-clamp-2">
-                    {featured.body_md.replace(/#|\*|\[|\]|\(|\)/g, "").slice(0, 120)}…
-                  </p>
-                  <span className="mt-4 inline-block text-sm text-[var(--accent)]">
-                    阅读更多 →
-                  </span>
-                </Link>
-              )}
-              <div className="space-y-4 md:col-span-1">
-                {rest.slice(0, 3).map((post) => (
-                  <Link
-                    key={post.id}
-                    href={`/post/${post.id}`}
-                    className="block rounded-lg border border-surface-border bg-surface p-4 transition hover:border-[var(--accent)]"
-                  >
-                    <h3 className="font-medium text-[var(--text)] line-clamp-1 text-sm">
-                      {post.title}
-                    </h3>
-                    <span className="mt-2 inline-block text-xs text-[var(--accent)]">
-                      阅读更多
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 底部 CTA */}
-      <section className="border-b border-surface-border bg-surface py-16 sm:py-20">
-        <div className="mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <h2 className="text-2xl font-semibold tracking-tight text-[var(--text)] sm:text-3xl">
-            立即加入，参与讨论
+      {/* Footer CTA */}
+      <section className="relative overflow-hidden bg-brand-coffee py-24 text-center text-white">
+        <div className="absolute inset-0 opacity-20">
+          <div className="h-full w-full bg-[url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80')] bg-cover bg-center"></div>
+        </div>
+        <div className="relative z-10 mx-auto max-w-2xl px-6">
+          <h2 className="font-serif text-4xl font-semibold sm:text-5xl">
+            Register Now
           </h2>
-          <p className="mt-2 text-[var(--text-muted)]">
-            登录后即可发帖、评论，与社区互动。
+          <p className="mt-6 text-lg text-brand-cream/70">
+            加入我们的社区，参与讨论，分享你的见解。
           </p>
-          <div className="mt-6">
+          <div className="mt-10">
             <Link
               href="/login"
-              className="inline-block rounded-md border border-[var(--accent)] bg-transparent px-6 py-3 text-sm font-medium text-[var(--accent)] transition hover:bg-[var(--accent)]/10"
+              className="inline-block rounded-full bg-brand-brown px-10 py-4 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-brand-cream hover:text-brand-coffee"
             >
-              登录 / 注册
+              Get Started
             </Link>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-[var(--bg-section)] py-10">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-            <div className="text-sm text-[var(--text-muted)]">
-              Si-Infra · 极简工业风论坛
+      <footer className="bg-brand-cream border-t border-brand-border py-16">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="flex flex-col items-center justify-between gap-10 md:flex-row">
+            <div className="text-center md:text-left">
+              <Link href="/" className="font-serif text-2xl font-bold text-brand-coffee">
+                {SITE_CONFIG.name}
+              </Link>
+              <p className="mt-2 text-sm text-brand-coffee/50">
+                © 2026 {SITE_CONFIG.name}. All rights reserved.
+              </p>
             </div>
-            <nav className="flex gap-6 text-sm">
-              <Link href="/about" className="text-[var(--text-muted)] hover:text-[var(--text)]">
-                关于
-              </Link>
-              <Link href="/ai" className="text-[var(--text-muted)] hover:text-[var(--text)]">
-                AI
-              </Link>
-              <Link href="/stablecoin" className="text-[var(--text-muted)] hover:text-[var(--text)]">
-                Stablecoin
-              </Link>
-              <Link href="/web3" className="text-[var(--text-muted)] hover:text-[var(--text)]">
-                Web3
-              </Link>
+            <nav className="flex flex-wrap justify-center gap-8 text-xs font-bold uppercase tracking-widest text-brand-coffee/70">
+              <Link href="/about" className="hover:text-brand-brown">About</Link>
+              {CATEGORIES.map((c) => (
+                <Link key={c.slug} href={`/${c.slug}`} className="hover:text-brand-brown">
+                  {c.label}
+                </Link>
+              ))}
             </nav>
+            <div className="flex gap-6">
+              {/* Social Icons Placeholder */}
+              <div className="h-5 w-5 rounded-full bg-brand-coffee/20"></div>
+              <div className="h-5 w-5 rounded-full bg-brand-coffee/20"></div>
+            </div>
           </div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }

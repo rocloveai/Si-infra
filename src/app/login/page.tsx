@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { SITE_CONFIG } from "@/lib/constants";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -43,78 +44,84 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="mx-auto max-w-sm px-4 py-16 sm:px-6">
-      <h1 className="text-xl font-semibold text-[var(--text)]">
-        {isSignUp ? "注册" : "登录"}
-      </h1>
-      <p className="mt-1 text-sm text-[var(--text-muted)]">
-        使用邮箱 {isSignUp ? "注册" : "登录"} Si-Infra
-      </p>
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-[var(--text-muted)]">
-            邮箱
-          </label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="mt-1 w-full rounded-md border border-surface-border bg-surface-light px-3 py-2 text-[var(--text)] placeholder:text-[var(--text-muted)] focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-            placeholder="you@example.com"
-          />
-        </div>
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-[var(--text-muted)]">
-            密码
-          </label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-            className="mt-1 w-full rounded-md border border-surface-border bg-surface-light px-3 py-2 text-[var(--text)] placeholder:text-[var(--text-muted)] focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-            placeholder="••••••••"
-          />
-        </div>
-        {message && (
-          <p
-            className={`text-sm ${
-              message.type === "ok" ? "text-accent" : "text-red-400"
-            }`}
-          >
-            {message.text}
+    <div className="flex min-h-[calc(100vh-80px)] items-center justify-center bg-brand-cream px-6 py-12">
+      <div className="w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl shadow-brand-brown/10">
+        <div className="bg-brand-coffee px-8 py-12 text-center text-white">
+          <h1 className="font-serif text-3xl font-bold">
+            {isSignUp ? "Create Account" : "Welcome Back"}
+          </h1>
+          <p className="mt-2 text-sm text-brand-cream/60 uppercase tracking-widest">
+            {isSignUp ? "Join the community" : "Login to your account"}
           </p>
-        )}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-md bg-surface-light px-4 py-2 text-sm font-medium text-[var(--text)] hover:bg-surface-border disabled:opacity-50"
-        >
-          {loading ? "处理中…" : isSignUp ? "注册" : "登录"}
-        </button>
-      </form>
-      <p className="mt-4 text-center text-sm text-[var(--text-muted)]">
-        {isSignUp ? "已有账号？" : "没有账号？"}{" "}
-        <button
-          type="button"
-          onClick={() => {
-            setIsSignUp((v) => !v);
-            setMessage(null);
-          }}
-          className="text-accent hover:underline"
-        >
-          {isSignUp ? "登录" : "注册"}
-        </button>
-      </p>
-      <p className="mt-4 text-center">
-        <Link href="/" className="text-sm text-[var(--text-muted)] hover:text-[var(--text)]">
-          ← 返回首页
-        </Link>
-      </p>
+        </div>
+        
+        <div className="p-8 sm:p-12">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label htmlFor="email" className="block text-xs font-bold uppercase tracking-widest text-brand-coffee/50">
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="mt-2 w-full border-b border-brand-border bg-transparent py-3 text-brand-coffee placeholder:text-brand-coffee/30 focus:border-brand-brown focus:outline-none transition-colors"
+                placeholder="you@example.com"
+              />
+            </div>
+            <div>
+              <label htmlFor="password" className="block text-xs font-bold uppercase tracking-widest text-brand-coffee/50">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                className="mt-2 w-full border-b border-brand-border bg-transparent py-3 text-brand-coffee placeholder:text-brand-coffee/30 focus:border-brand-brown focus:outline-none transition-colors"
+                placeholder="••••••••"
+              />
+            </div>
+            
+            {message && (
+              <p className={`text-sm font-medium ${message.type === "ok" ? "text-brand-brown" : "text-red-500"}`}>
+                {message.text}
+              </p>
+            )}
+            
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-full bg-brand-brown py-4 text-xs font-bold uppercase tracking-widest text-white transition hover:bg-brand-coffee disabled:opacity-50"
+            >
+              {loading ? "Processing..." : isSignUp ? "Sign Up" : "Login"}
+            </button>
+          </form>
+          
+          <div className="mt-10 text-center">
+            <p className="text-sm text-brand-coffee/60">
+              {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSignUp((v) => !v);
+                  setMessage(null);
+                }}
+                className="font-bold text-brand-brown hover:underline"
+              >
+                {isSignUp ? "Login" : "Sign Up"}
+              </button>
+            </p>
+            <Link href="/" className="mt-6 inline-block text-xs font-bold uppercase tracking-widest text-brand-coffee/40 hover:text-brand-coffee">
+              ← Back to Home
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

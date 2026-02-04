@@ -9,21 +9,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        surface: "#1b2634",
-        "surface-light": "#243447",
-        "surface-border": "#2d3d52",
-        accent: "#5b7c99",
-        "accent-muted": "#3d5266",
+        brand: {
+          cream: "#fdfaf5",
+          sand: "#f5efe6",
+          brown: "#b08968",
+          coffee: "#4a3f35",
+          border: "#e3d5ca",
+        },
+        surface: "#ffffff",
+        accent: "#b08968",
       },
       fontFamily: {
-        sans: [
-          "ui-sans-serif",
-          "system-ui",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "sans-serif",
-        ],
-        mono: ["ui-monospace", "SFMono-Regular", "Consolas", "monospace"],
+        serif: ["'Playfair Display'", "serif"],
+        sans: ["Inter", "system-ui", "sans-serif"],
+      },
+      borderRadius: {
+        '2xl': '1rem',
+        '3xl': '1.5rem',
       },
     },
   },

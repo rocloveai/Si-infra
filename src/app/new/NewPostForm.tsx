@@ -3,13 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import type { CategorySlug } from "@/types/db";
-
-const CATEGORIES: { value: CategorySlug; label: string }[] = [
-  { value: "ai", label: "AI" },
-  { value: "stablecoin", label: "Stablecoin" },
-  { value: "web3", label: "Web3" },
-];
+import type { CategorySlug } from "@/lib/constants";
+import { CATEGORIES } from "@/lib/constants";
 
 const BUCKET = "post-images";
 
@@ -17,7 +12,7 @@ export function NewPostForm() {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [bodyMd, setBodyMd] = useState("");
-  const [categorySlug, setCategorySlug] = useState<CategorySlug>("ai");
+  const [categorySlug, setCategorySlug] = useState<CategorySlug>(CATEGORIES[0].slug);
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -98,7 +93,7 @@ export function NewPostForm() {
           className="mt-1 w-full rounded-md border border-surface-border bg-surface-light px-3 py-2 text-[var(--text)] focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
         >
           {CATEGORIES.map((c) => (
-            <option key={c.value} value={c.value}>
+            <option key={c.slug} value={c.slug}>
               {c.label}
             </option>
           ))}
