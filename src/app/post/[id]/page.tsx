@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { MarkdownContent } from "@/components/MarkdownContent";
@@ -54,40 +55,45 @@ export default async function PostPage({
   return (
     <div className="bg-brand-cream min-h-screen">
       {/* Header with Background Image */}
-      <div className="relative h-[40vh] w-full overflow-hidden bg-brand-coffee">
-        <div className="absolute inset-0 opacity-50">
-          <div className="h-full w-full bg-[url('https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&q=80')] bg-cover bg-center"></div>
+      <div className="relative h-[50vh] w-full overflow-hidden bg-brand-dark">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/hero-road.jpg"
+            alt="Post header"
+            fill
+            className="object-cover opacity-40"
+          />
         </div>
         <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
           <Link
             href={`/${post.category_slug}`}
-            className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-brand-cream hover:text-white"
+            className="mb-4 inline-block rounded-full bg-white/10 px-6 py-2 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
           >
             {categoryInfo?.label ?? post.category_slug}
           </Link>
-          <h1 className="max-w-4xl font-serif text-3xl font-bold text-white sm:text-5xl">
+          <h1 className="max-w-4xl font-display text-3xl font-bold text-white sm:text-5xl lg:text-6xl">
             {post.title}
           </h1>
-          <div className="mt-6 flex items-center gap-4 text-xs font-medium text-brand-cream/70">
+          <div className="mt-6 flex items-center gap-4 text-sm font-medium text-white/70">
             <span>{formatDate(post.created_at)}</span>
-            <span className="h-1 w-1 rounded-full bg-brand-cream/30"></span>
-            <span>By Community Member</span>
+            <span className="h-1 w-1 rounded-full bg-white/30"></span>
+            <span>作者</span>
           </div>
         </div>
       </div>
 
       {/* Content Area */}
       <article className="mx-auto -mt-20 relative z-20 max-w-4xl px-6 pb-24">
-        <div className="rounded-3xl bg-white p-8 shadow-xl shadow-brand-brown/5 sm:p-16">
+        <div className="rounded-3xl bg-white p-8 shadow-2xl sm:p-16">
           <div className="prose prose-stone max-w-none">
             <MarkdownContent content={post.body_md} />
           </div>
 
           <section className="mt-20 border-t border-brand-border pt-12">
             <div className="mb-10">
-              <h2 className="font-serif text-3xl font-semibold text-brand-coffee">Comments</h2>
-              <p className="mt-2 text-sm text-brand-coffee/50 uppercase tracking-widest font-bold">
-                Join the discussion
+              <h2 className="font-display text-3xl font-bold text-brand-dark">评论</h2>
+              <p className="mt-2 text-base text-brand-muted">
+                参与讨论
               </p>
             </div>
             <CommentForm postId={post.id} />

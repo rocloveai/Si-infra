@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { CATEGORIES, SITE_CONFIG } from "@/lib/constants";
 import { formatDate, stripMarkdown } from "@/lib/utils";
@@ -12,63 +13,68 @@ export default async function HomePage() {
     .limit(12);
 
   const list = posts ?? [];
-  const featured = list[0];
-  const rest = list.slice(1, 7);
-  
   const categoryMap = Object.fromEntries(CATEGORIES.map(c => [c.slug, c.label]));
 
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-brand-coffee">
-        <div className="absolute inset-0 opacity-30">
-          <div className="h-full w-full bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80')] bg-cover bg-center"></div>
+      <section className="relative min-h-[90vh] overflow-hidden bg-brand-cream">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/hero-road.jpg"
+            alt="Hero background"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-brand-cream"></div>
         </div>
-        <div className="relative z-10 mx-auto max-w-5xl px-6 text-center">
-          <h1 className="font-serif text-5xl font-bold leading-tight text-white sm:text-8xl">
-            {SITE_CONFIG.hero.title}
-          </h1>
-          <p className="mt-8 font-sans text-xl tracking-wide text-brand-cream/80 sm:text-2xl">
-            {SITE_CONFIG.hero.subtitle}
-          </p>
-          <div className="mt-12 flex flex-col items-center justify-center gap-6 sm:flex-row">
-            <Link
-              href="#latest"
-              className="inline-block rounded-full bg-brand-brown px-10 py-4 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-brand-cream hover:text-brand-coffee"
-            >
-              阅读最新内容
-            </Link>
-            <Link
-              href="#topics"
-              className="inline-block rounded-full border border-brand-cream/30 px-10 py-4 text-sm font-bold uppercase tracking-widest text-brand-cream transition hover:bg-brand-cream hover:text-brand-coffee"
-            >
-              按主题浏览
-            </Link>
+        <div className="relative z-10 mx-auto flex min-h-[90vh] max-w-7xl flex-col justify-end px-6 pb-20 sm:px-12">
+          <div className="max-w-3xl">
+            <h1 className="font-display text-5xl font-bold leading-tight text-white sm:text-7xl lg:text-8xl">
+              {SITE_CONFIG.hero.title}
+            </h1>
+            <div className="mt-8 inline-block rounded-full bg-white px-8 py-4 shadow-lg">
+              <p className="text-base font-medium text-brand-dark sm:text-lg">
+                {SITE_CONFIG.hero.subtitle}
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Topics Section */}
-      <section id="topics" className="bg-brand-cream py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="grid gap-8 sm:grid-cols-3">
-            {CATEGORIES.map(({ slug, label, description }) => (
+      {/* Featured Categories Section */}
+      <section className="bg-brand-cream py-20 sm:py-32">
+        <div className="mx-auto max-w-7xl px-6 sm:px-12">
+          <div className="mb-16">
+            <h2 className="font-display text-4xl font-bold text-brand-dark sm:text-5xl">
+              探索主题
+            </h2>
+          </div>
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {CATEGORIES.map(({ slug, label, description }, index) => (
               <Link
                 key={slug}
                 href={`/${slug}`}
-                className="group relative flex flex-col overflow-hidden rounded-3xl bg-white p-10 shadow-xl shadow-brand-brown/5 transition-all hover:-translate-y-2 hover:shadow-2xl"
+                className="group relative overflow-hidden rounded-3xl bg-white shadow-lg transition-all hover:-translate-y-2 hover:shadow-2xl"
               >
-                <span className="mb-6 block text-xs font-bold uppercase tracking-widest text-brand-brown">
-                  {label}
-                </span>
-                <h3 className="font-serif text-2xl font-semibold text-brand-coffee group-hover:text-brand-brown">
-                  {label}
-                </h3>
-                <p className="mt-4 text-brand-coffee/60 leading-relaxed">
-                  {description}
-                </p>
-                <div className="mt-8 flex items-center text-xs font-bold uppercase tracking-widest text-brand-brown opacity-0 transition-opacity group-hover:opacity-100">
-                  进入栏目 →
+                <div className="aspect-[4/3] overflow-hidden bg-gradient-to-br from-brand-blue/20 to-brand-orange/20">
+                  <div className="relative h-full w-full">
+                    <Image
+                      src={index === 0 ? "/images/vintage-car.jpg" : index === 1 ? "/images/mountain-road.jpg" : "/images/adventure.jpg"}
+                      alt={label}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                  </div>
+                </div>
+                <div className="p-8">
+                  <h3 className="font-display text-2xl font-bold text-brand-dark">
+                    {label}
+                  </h3>
+                  <p className="mt-3 text-base leading-relaxed text-brand-muted">
+                    {description}
+                  </p>
                 </div>
               </Link>
             ))}
@@ -76,86 +82,119 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Latest Posts Section */}
-      <section id="latest" className="bg-white py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="mb-16 flex items-end justify-between border-b border-brand-border pb-8">
+      {/* Latest Posts Grid Section */}
+      <section className="bg-white py-20 sm:py-32">
+        <div className="mx-auto max-w-7xl px-6 sm:px-12">
+          <div className="mb-16 flex items-end justify-between">
             <div>
-              <h2 className="font-serif text-4xl font-semibold text-brand-coffee">最新文章</h2>
-              <p className="mt-2 text-xs font-bold uppercase tracking-widest text-brand-brown">
-                Recent thoughts and analysis
+              <h2 className="font-display text-4xl font-bold text-brand-dark sm:text-5xl">
+                最新内容
+              </h2>
+              <p className="mt-3 text-lg text-brand-muted">
+                探索我们的最新文章和见解
               </p>
             </div>
           </div>
 
-          <div className="grid gap-12 lg:grid-cols-3">
-            {featured && (
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {list.slice(0, 6).map((post) => (
               <Link
-                href={`/post/${featured.id}`}
-                className="group lg:col-span-2"
+                key={post.id}
+                href={`/post/${post.id}`}
+                className="group flex flex-col overflow-hidden rounded-3xl bg-brand-cream shadow-md transition-all hover:-translate-y-2 hover:shadow-xl"
               >
-                <div className="aspect-[16/9] overflow-hidden rounded-3xl bg-brand-sand">
-                  <div className="h-full w-full bg-[url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105"></div>
-                </div>
-                <div className="mt-8">
-                  <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-brand-brown">
-                    <span>{categoryMap[featured.category_slug]}</span>
-                    <span className="h-px w-8 bg-brand-border"></span>
-                    <span className="text-brand-coffee/40">{formatDate(featured.created_at)}</span>
+                <div className="aspect-[16/10] overflow-hidden bg-gradient-to-br from-brand-blue/10 to-brand-orange/10">
+                  <div className="relative h-full w-full">
+                    <Image
+                      src="/images/mountain-road.jpg"
+                      alt={post.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
                   </div>
-                  <h3 className="mt-4 font-serif text-3xl font-semibold text-brand-coffee group-hover:text-brand-brown">
-                    {featured.title}
+                </div>
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="mb-3 flex items-center gap-3 text-sm font-semibold text-brand-blue">
+                    <span>{categoryMap[post.category_slug]}</span>
+                  </div>
+                  <h3 className="font-display text-xl font-bold leading-tight text-brand-dark group-hover:text-brand-blue line-clamp-2">
+                    {post.title}
                   </h3>
-                  <p className="mt-4 text-lg leading-relaxed text-brand-coffee/60 line-clamp-2">
-                    {stripMarkdown(featured.body_md)}
+                  <p className="mt-3 flex-1 text-base leading-relaxed text-brand-muted line-clamp-3">
+                    {stripMarkdown(post.body_md)}
                   </p>
+                  <div className="mt-4 text-sm text-brand-muted">
+                    {formatDate(post.created_at)}
+                  </div>
                 </div>
               </Link>
-            )}
-            <div className="space-y-10">
-              {rest.slice(0, 4).map((post) => (
-                <Link
-                  key={post.id}
-                  href={`/post/${post.id}`}
-                  className="group flex gap-6"
-                >
-                  <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl bg-brand-sand">
-                    <div className="h-full w-full bg-[url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80')] bg-cover bg-center transition-transform duration-500 group-hover:scale-110"></div>
-                  </div>
-                  <div className="flex flex-col justify-center">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-brand-brown">
-                      {categoryMap[post.category_slug]}
-                    </span>
-                    <h4 className="mt-1 font-serif text-lg font-semibold leading-tight text-brand-coffee group-hover:text-brand-brown line-clamp-2">
-                      {post.title}
-                    </h4>
-                  </div>
-                </Link>
-              ))}
-            </div>
+            ))}
+          </div>
+
+          <div className="mt-16 text-center">
+            <Link
+              href="#"
+              className="inline-block rounded-full bg-brand-dark px-10 py-4 text-base font-semibold text-white transition hover:bg-brand-blue"
+            >
+              查看更多文章
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="relative overflow-hidden bg-brand-dark py-20 sm:py-32">
+        <div className="absolute inset-0 opacity-20">
+          <Image
+            src="/images/vintage-car.jpg"
+            alt="Background"
+            fill
+            className="object-cover"
+          />
+        </div>
+        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center sm:px-12">
+          <h2 className="font-display text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
+            准备开始你的旅程?
+          </h2>
+          <p className="mt-6 text-lg leading-relaxed text-white/80 sm:text-xl">
+            加入我们的社区,分享你的故事和见解
+          </p>
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link
+              href="/new"
+              className="inline-block rounded-full bg-brand-blue px-10 py-4 text-base font-semibold text-white transition hover:bg-brand-orange"
+            >
+              发布新文章
+            </Link>
+            <Link
+              href="/about"
+              className="inline-block rounded-full border-2 border-white/30 px-10 py-4 text-base font-semibold text-white transition hover:bg-white hover:text-brand-dark"
+            >
+              了解更多
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-brand-cream border-t border-brand-border py-16">
-        <div className="mx-auto max-w-6xl px-6">
+      <footer className="border-t border-brand-border bg-brand-cream py-16">
+        <div className="mx-auto max-w-7xl px-6 sm:px-12">
           <div className="flex flex-col items-center justify-between gap-10 md:flex-row">
             <div className="text-center md:text-left">
-              <Link href="/" className="font-serif text-2xl font-bold text-brand-coffee">
+              <Link href="/" className="font-display text-2xl font-bold text-brand-dark">
                 {SITE_CONFIG.name}
               </Link>
-              <p className="mt-2 text-sm text-brand-coffee/50">
+              <p className="mt-2 text-sm text-brand-muted">
                 © 2026 {SITE_CONFIG.name}. All rights reserved.
               </p>
             </div>
-            <nav className="flex flex-wrap justify-center gap-8 text-xs font-bold uppercase tracking-widest text-brand-coffee/70">
+            <nav className="flex flex-wrap justify-center gap-8 text-sm font-semibold text-brand-muted">
               {CATEGORIES.map((c) => (
-                <Link key={c.slug} href={`/${c.slug}`} className="hover:text-brand-brown">
+                <Link key={c.slug} href={`/${c.slug}`} className="hover:text-brand-blue">
                   {c.label}
                 </Link>
               ))}
-              <Link href="/about" className="hover:text-brand-brown">关于</Link>
+              <Link href="/about" className="hover:text-brand-blue">关于</Link>
             </nav>
           </div>
         </div>

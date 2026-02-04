@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PostList } from "@/components/PostList";
@@ -43,32 +44,38 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <div className="bg-brand-cream min-h-screen">
       {/* Category Header */}
-      <section className="relative flex min-h-[60vh] items-center justify-center overflow-hidden bg-brand-coffee">
-        <div className="absolute inset-0 opacity-40">
-          <div className="h-full w-full bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80')] bg-cover bg-center"></div>
+      <section className="relative flex min-h-[60vh] items-center justify-center overflow-hidden bg-brand-dark">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/mountain-road.jpg"
+            alt={categoryInfo.label}
+            fill
+            className="object-cover opacity-40"
+          />
         </div>
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
-          <span className="mb-6 block text-xs font-bold uppercase tracking-[0.3em] text-brand-cream/80">
-            Column / {categoryInfo.label}
-          </span>
-          <h1 className="font-serif text-5xl font-bold text-white sm:text-7xl">
+          <div className="mb-6 inline-block rounded-full bg-white/10 px-6 py-2 backdrop-blur-sm">
+            <span className="text-sm font-semibold text-white">
+              {categoryInfo.label}
+            </span>
+          </div>
+          <h1 className="font-display text-5xl font-bold text-white sm:text-7xl">
             {categoryInfo.label}
           </h1>
-          <div className="mt-10 flex justify-center">
-            <div className="h-px w-24 bg-brand-brown"></div>
-          </div>
-          <p className="mt-10 text-lg leading-relaxed text-brand-cream/90 sm:text-xl">
+          <p className="mt-8 text-lg leading-relaxed text-white/90 sm:text-xl">
             {categoryInfo.longDescription}
           </p>
         </div>
       </section>
 
       {/* Posts Grid */}
-      <section className="mx-auto max-w-6xl px-6 py-24 sm:py-32">
-        <div className="mb-16 flex items-center justify-between border-b border-brand-border pb-8">
-          <h2 className="font-serif text-3xl font-semibold text-brand-coffee">栏目文章</h2>
-          <span className="text-xs font-bold uppercase tracking-widest text-brand-coffee/40">
-            {posts?.length ?? 0} Posts Found
+      <section className="mx-auto max-w-6xl px-6 py-20 sm:px-12 sm:py-32">
+        <div className="mb-12 flex items-center justify-between">
+          <h2 className="font-display text-3xl font-bold text-brand-dark sm:text-4xl">
+            全部文章
+          </h2>
+          <span className="text-sm font-semibold text-brand-muted">
+            共 {posts?.length ?? 0} 篇
           </span>
         </div>
         <PostList posts={posts ?? []} />

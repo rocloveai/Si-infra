@@ -4,12 +4,12 @@ export default function NewPostPage() {
   return (
     <div className="bg-brand-cream min-h-screen py-20">
       <div className="mx-auto max-w-3xl px-6">
-        <div className="rounded-3xl bg-white p-8 shadow-xl shadow-brand-brown/5 sm:p-12">
-          <h1 className="font-serif text-3xl font-semibold text-brand-coffee">
-            发布新内容
+        <div className="rounded-3xl bg-white p-8 shadow-xl sm:p-12">
+          <h1 className="font-display text-3xl font-bold text-brand-dark sm:text-4xl">
+            发布新文章
           </h1>
-          <p className="mt-2 text-sm text-brand-coffee/50 uppercase tracking-widest font-bold">
-            Share your thoughts with the world
+          <p className="mt-3 text-base text-brand-muted">
+            分享你的想法和见解
           </p>
           <div className="mt-10">
             <NewPostForm />

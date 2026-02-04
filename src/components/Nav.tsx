@@ -9,11 +9,11 @@ export function Nav() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-brand-border bg-brand-cream/80 backdrop-blur-md">
-      <nav className="mx-auto flex h-20 max-w-6xl items-center justify-between px-6">
+    <header className="sticky top-0 z-50 border-b border-brand-border bg-white/95 backdrop-blur-md shadow-sm">
+      <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 sm:px-12">
         <Link
           href="/"
-          className="font-serif text-2xl font-semibold tracking-tight text-brand-coffee transition hover:text-brand-brown"
+          className="font-display text-xl font-bold tracking-tight text-brand-dark transition hover:text-brand-blue sm:text-2xl"
         >
           {SITE_CONFIG.name}
         </Link>
@@ -27,10 +27,10 @@ export function Nav() {
                   <Link
                     href={href}
                     className={cn(
-                      "text-sm font-medium tracking-wide transition-colors uppercase",
+                      "text-sm font-semibold tracking-wide transition-colors",
                       isActive
-                        ? "text-brand-brown"
-                        : "text-brand-coffee/70 hover:text-brand-brown"
+                        ? "text-brand-blue"
+                        : "text-brand-muted hover:text-brand-blue"
                     )}
                   >
                     {label}
@@ -39,12 +39,12 @@ export function Nav() {
               );
             })}
           </ul>
-          <div className="flex items-center gap-4 border-l border-brand-border pl-8">
+          <div className="flex items-center gap-4">
             <Link
               href="/new"
-              className="rounded-full bg-brand-brown px-6 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-brand-coffee"
+              className="rounded-full bg-brand-blue px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange"
             >
-              POST
+              发布文章
             </Link>
           </div>
         </div>
