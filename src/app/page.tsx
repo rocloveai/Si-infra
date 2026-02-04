@@ -17,35 +17,25 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section with Video Background */}
+      {/* Hero Section */}
       <section className="relative min-h-[90vh] overflow-hidden bg-brand-dark">
-        {/* Video Background */}
         <div className="absolute inset-0">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="h-full w-full object-cover"
-          >
-            <source src="https://cdn.coverr.co/videos/coverr-scenic-road-through-mountains-5361/1080p.mp4" type="video/mp4" />
-            {/* Fallback image */}
-            <Image
-              src="/images/hero-road.jpg"
-              alt="Hero background"
-              fill
-              className="object-cover"
-              priority
-            />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-brand-cream"></div>
+          <Image
+            src="/images/hero-road.jpg"
+            alt="Hero background"
+            fill
+            className="object-cover"
+            priority
+            quality={100}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-brand-cream"></div>
         </div>
         <div className="relative z-10 mx-auto flex min-h-[90vh] max-w-7xl flex-col justify-end px-6 pb-20 sm:px-12">
           <div className="max-w-3xl">
-            <h1 className="font-display text-5xl font-bold leading-tight text-white sm:text-7xl lg:text-8xl">
+            <h1 className="font-display text-5xl font-bold leading-tight text-white sm:text-7xl lg:text-8xl drop-shadow-2xl">
               {SITE_CONFIG.hero.title}
             </h1>
-            <div className="mt-8 inline-block rounded-full bg-white px-8 py-4 shadow-lg">
+            <div className="mt-8 inline-block rounded-full bg-white/95 px-8 py-4 shadow-2xl backdrop-blur-sm">
               <p className="text-base font-medium text-brand-dark sm:text-lg">
                 {SITE_CONFIG.hero.subtitle}
               </p>
