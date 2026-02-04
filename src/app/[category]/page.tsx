@@ -43,19 +43,22 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <div className="bg-brand-cream min-h-screen">
       {/* Category Header */}
-      <section className="relative h-[50vh] w-full overflow-hidden bg-brand-coffee">
+      <section className="relative flex min-h-[60vh] items-center justify-center overflow-hidden bg-brand-coffee">
         <div className="absolute inset-0 opacity-40">
           <div className="h-full w-full bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80')] bg-cover bg-center"></div>
         </div>
-        <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
-          <span className="mb-4 block text-xs font-bold uppercase tracking-[0.3em] text-brand-cream/80">
-            Explore Category
+        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+          <span className="mb-6 block text-xs font-bold uppercase tracking-[0.3em] text-brand-cream/80">
+            Column / {categoryInfo.label}
           </span>
           <h1 className="font-serif text-5xl font-bold text-white sm:text-7xl">
             {categoryInfo.label}
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-brand-cream/70">
-            {categoryInfo.description}
+          <div className="mt-10 flex justify-center">
+            <div className="h-px w-24 bg-brand-brown"></div>
+          </div>
+          <p className="mt-10 text-lg leading-relaxed text-brand-cream/90 sm:text-xl">
+            {categoryInfo.longDescription}
           </p>
         </div>
       </section>
@@ -63,7 +66,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       {/* Posts Grid */}
       <section className="mx-auto max-w-6xl px-6 py-24 sm:py-32">
         <div className="mb-16 flex items-center justify-between border-b border-brand-border pb-8">
-          <h2 className="font-serif text-3xl font-semibold text-brand-coffee">Latest Discussions</h2>
+          <h2 className="font-serif text-3xl font-semibold text-brand-coffee">栏目文章</h2>
           <span className="text-xs font-bold uppercase tracking-widest text-brand-coffee/40">
             {posts?.length ?? 0} Posts Found
           </span>

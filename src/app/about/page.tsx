@@ -10,7 +10,7 @@ export default function AboutPage() {
         </div>
         <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
           <h1 className="font-serif text-5xl font-bold text-white sm:text-6xl">
-            About {SITE_CONFIG.name}
+            关于 {SITE_CONFIG.name}
           </h1>
         </div>
       </section>
@@ -19,31 +19,35 @@ export default function AboutPage() {
       <section className="mx-auto max-w-4xl px-6 py-24 sm:py-32">
         <div className="rounded-3xl bg-white p-8 shadow-xl shadow-brand-brown/5 sm:p-16">
           <div className="prose prose-stone max-w-none">
-            <h2 className="font-serif text-3xl font-semibold text-brand-coffee">Our Vision</h2>
-            <p className="mt-6 text-lg leading-relaxed text-brand-coffee/70">
-              {SITE_CONFIG.name} 是一个 Web2 论坛，聚焦 AI、Stablecoin、Web3 与基础设施话题。
-              我们相信，在技术飞速发展的今天，一个开放、理性且具有信息密度的讨论环境比以往任何时候都更加重要。
+            <h2 className="font-serif text-3xl font-semibold text-brand-coffee">站点定位</h2>
+            <p className="mt-8 text-xl leading-relaxed text-brand-coffee/80">
+              这是一个个人内容站，用来打磨我对未来十年的判断。我会把自己的假设写清楚，把支撑这些假设的证据和推导记录下来，并在现实信号变化时更新结论。
             </p>
             
-            <div className="my-12 grid gap-8 sm:grid-cols-2">
+            <p className="mt-6 text-xl leading-relaxed text-brand-coffee/80">
+              我目前重点关注三个主题：AI、稳定币、区块链。它们未必需要被强行串成一个统一叙事；对我来说，更重要的是持续追踪这些变量如何改变生产力、价值流动与协作秩序，以及它们各自的边界条件、风险与真实落地路径。
+            </p>
+
+            <div className="mt-16 grid gap-8 sm:grid-cols-3">
               <div className="rounded-2xl bg-brand-sand p-8">
-                <h3 className="font-serif text-xl font-semibold text-brand-coffee">Technology</h3>
+                <h3 className="font-serif text-xl font-semibold text-brand-coffee">AI</h3>
                 <p className="mt-4 text-sm text-brand-coffee/70">
-                  采用 Next.js 14 (App Router) 与 Supabase 构建，确保极致的性能与安全性。
+                  生产力革命与硅基智能。
                 </p>
               </div>
               <div className="rounded-2xl bg-brand-sand p-8">
-                <h3 className="font-serif text-xl font-semibold text-brand-coffee">Community</h3>
+                <h3 className="font-serif text-xl font-semibold text-brand-coffee">Stablecoin</h3>
                 <p className="mt-4 text-sm text-brand-coffee/70">
-                  支持 Markdown、图片与视频嵌入，让每一篇分享都能以最完美的形式呈现。
+                  价值流动的全球润滑剂。
+                </p>
+              </div>
+              <div className="rounded-2xl bg-brand-sand p-8">
+                <h3 className="font-serif text-xl font-semibold text-brand-coffee">Blockchain</h3>
+                <p className="mt-4 text-sm text-brand-coffee/70">
+                  宇宙通用的可信账本。
                 </p>
               </div>
             </div>
-
-            <h2 className="mt-16 font-serif text-3xl font-semibold text-brand-coffee">Join the Conversation</h2>
-            <p className="mt-6 text-lg leading-relaxed text-brand-coffee/70">
-              无论你是行业专家还是初学者，我们都欢迎你加入讨论。在这里，每一个声音都重要，每一次交流都能碰撞出新的火花。
-            </p>
           </div>
         </div>
       </section>

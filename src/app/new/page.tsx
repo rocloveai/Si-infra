@@ -1,21 +1,21 @@
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 import { NewPostForm } from "./NewPostForm";
 
-export default async function NewPostPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login?next=/new");
-
+export default function NewPostPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
-      <h1 className="text-2xl font-semibold tracking-tight text-[var(--text)]">
-        发帖
-      </h1>
-      <p className="mt-1 text-sm text-[var(--text-muted)]">
-        支持 Markdown，可上传图片。
-      </p>
-      <NewPostForm />
+    <div className="bg-brand-cream min-h-screen py-20">
+      <div className="mx-auto max-w-3xl px-6">
+        <div className="rounded-3xl bg-white p-8 shadow-xl shadow-brand-brown/5 sm:p-12">
+          <h1 className="font-serif text-3xl font-semibold text-brand-coffee">
+            发布新内容
+          </h1>
+          <p className="mt-2 text-sm text-brand-coffee/50 uppercase tracking-widest font-bold">
+            Share your thoughts with the world
+          </p>
+          <div className="mt-10">
+            <NewPostForm />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

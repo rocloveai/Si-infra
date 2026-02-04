@@ -47,13 +47,13 @@ export function NewPostForm() {
     setSubmitting(true);
     setError(null);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("请先登录");
+      // 移除用户登录检查，直接插入数据
+      // 注意：在实际生产环境中，您可能需要在 Supabase RLS 中允许匿名插入，或者在这里硬编码一个管理员 ID
       const { error: insertErr } = await supabase.from("posts").insert({
         title: title.trim(),
         body_md: bodyMd.trim(),
         category_slug: categorySlug,
-        user_id: user.id,
+        // 如果数据库要求 user_id，您可能需要在这里提供一个默认值或处理 RLS
       });
       if (insertErr) throw insertErr;
       router.push(`/${categorySlug}`);
@@ -66,9 +66,9 @@ export function NewPostForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-8">
       <div>
-        <label htmlFor="title" className="block text-sm font-medium text-[var(--text-muted)]">
+        <label htmlFor="title" className="block text-xs font-bold uppercase tracking-widest text-brand-coffee/50">
           标题
         </label>
         <input
@@ -78,19 +78,19 @@ export function NewPostForm() {
           onChange={(e) => setTitle(e.target.value)}
           required
           maxLength={200}
-          className="mt-1 w-full rounded-md border border-surface-border bg-surface-light px-3 py-2 text-[var(--text)] placeholder:text-[var(--text-muted)] focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-          placeholder="帖子标题"
+          className="mt-2 w-full border-b border-brand-border bg-transparent py-3 text-brand-coffee placeholder:text-brand-coffee/30 focus:border-brand-brown focus:outline-none transition-colors"
+          placeholder="输入文章标题"
         />
       </div>
       <div>
-        <label htmlFor="category" className="block text-sm font-medium text-[var(--text-muted)]">
+        <label htmlFor="category" className="block text-xs font-bold uppercase tracking-widest text-brand-coffee/50">
           分类
         </label>
         <select
           id="category"
           value={categorySlug}
           onChange={(e) => setCategorySlug(e.target.value as CategorySlug)}
-          className="mt-1 w-full rounded-md border border-surface-border bg-surface-light px-3 py-2 text-[var(--text)] focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          className="mt-2 w-full border-b border-brand-border bg-transparent py-3 text-brand-coffee focus:border-brand-brown focus:outline-none transition-colors appearance-none"
         >
           {CATEGORIES.map((c) => (
             <option key={c.slug} value={c.slug}>
@@ -101,11 +101,11 @@ export function NewPostForm() {
       </div>
       <div>
         <div className="flex items-center justify-between">
-          <label htmlFor="body" className="block text-sm font-medium text-[var(--text-muted)]">
-            正文（Markdown）
+          <label htmlFor="body" className="block text-xs font-bold uppercase tracking-widest text-brand-coffee/50">
+            正文 (Markdown)
           </label>
-          <label className="cursor-pointer text-sm text-accent hover:underline">
-            {uploading ? "上传中…" : "上传图片"}
+          <label className="cursor-pointer text-xs font-bold uppercase tracking-widest text-brand-brown hover:underline">
+            {uploading ? "上传中…" : "插入图片"}
             <input
               type="file"
               accept="image/*"
@@ -120,26 +120,26 @@ export function NewPostForm() {
           value={bodyMd}
           onChange={(e) => setBodyMd(e.target.value)}
           required
-          rows={14}
-          className="mt-1 w-full rounded-md border border-surface-border bg-surface-light px-3 py-2 font-mono text-sm text-[var(--text)] placeholder:text-[var(--text-muted)] focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-          placeholder="支持 **粗体**、列表、链接等 Markdown 语法。点击「上传图片」插入图片。"
+          rows={12}
+          className="mt-2 w-full rounded-2xl border border-brand-border bg-brand-cream/30 p-6 font-sans text-brand-coffee placeholder:text-brand-coffee/30 focus:border-brand-brown focus:outline-none transition-colors"
+          placeholder="支持 Markdown 语法..."
         />
       </div>
       {error && (
-        <p className="text-sm text-red-400">{error}</p>
+        <p className="text-sm font-medium text-red-500">{error}</p>
       )}
-      <div className="flex gap-3">
+      <div className="flex gap-4">
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-md bg-surface-light px-4 py-2 text-sm font-medium text-[var(--text)] hover:bg-surface-border disabled:opacity-50"
+          className="flex-1 rounded-full bg-brand-brown py-4 text-xs font-bold uppercase tracking-widest text-white transition hover:bg-brand-coffee disabled:opacity-50"
         >
-          {submitting ? "发布中…" : "发布"}
+          {submitting ? "发布中..." : "立即发布"}
         </button>
         <button
           type="button"
           onClick={() => router.back()}
-          className="rounded-md px-4 py-2 text-sm font-medium text-[var(--text-muted)] hover:bg-surface-light/50 hover:text-[var(--text)]"
+          className="rounded-full border border-brand-border px-8 py-4 text-xs font-bold uppercase tracking-widest text-brand-coffee/50 transition hover:bg-brand-cream"
         >
           取消
         </button>
