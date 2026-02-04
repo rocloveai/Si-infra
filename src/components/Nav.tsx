@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { NAV_ITEMS, SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -13,9 +14,16 @@ export function Nav() {
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 sm:px-12">
         <Link
           href="/"
-          className="font-display text-xl font-bold tracking-tight text-brand-dark transition hover:text-brand-blue sm:text-2xl"
+          className="flex items-center gap-3 font-display text-xl font-bold tracking-tight text-brand-dark transition hover:text-brand-blue sm:text-2xl"
         >
-          {SITE_CONFIG.name}
+          <Image
+            src="/images/logo.png"
+            alt={SITE_CONFIG.name}
+            width={40}
+            height={40}
+            className="h-10 w-10"
+          />
+          <span>{SITE_CONFIG.name}</span>
         </Link>
         <div className="flex items-center gap-8">
           <ul className="hidden items-center gap-8 md:flex">

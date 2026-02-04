@@ -54,11 +54,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           />
         </div>
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
-          <div className="mb-6 inline-block rounded-full bg-white/10 px-6 py-2 backdrop-blur-sm">
-            <span className="text-sm font-semibold text-white">
-              {categoryInfo.label}
-            </span>
-          </div>
           <h1 className="font-display text-5xl font-bold text-white sm:text-7xl">
             {categoryInfo.label}
           </h1>
